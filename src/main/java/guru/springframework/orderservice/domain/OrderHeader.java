@@ -49,6 +49,8 @@ public class OrderHeader extends BaseEntity{
     private Address shippingAddress;
     @Embedded
     private Address billToAddress;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
 
     public String getCustomer() {
         return customer;
@@ -74,6 +76,13 @@ public class OrderHeader extends BaseEntity{
         this.billToAddress = billToAddress;
     }
 
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -85,7 +94,9 @@ public class OrderHeader extends BaseEntity{
         if (!Objects.equals(customer, that.customer)) return false;
         if (!Objects.equals(shippingAddress, that.shippingAddress))
             return false;
-        return Objects.equals(billToAddress, that.billToAddress);
+        if (!Objects.equals(billToAddress, that.billToAddress))
+            return false;
+        return orderStatus == that.orderStatus;
     }
 
     @Override
@@ -94,6 +105,7 @@ public class OrderHeader extends BaseEntity{
         result = 31 * result + (customer != null ? customer.hashCode() : 0);
         result = 31 * result + (shippingAddress != null ? shippingAddress.hashCode() : 0);
         result = 31 * result + (billToAddress != null ? billToAddress.hashCode() : 0);
+        result = 31 * result + (orderStatus != null ? orderStatus.hashCode() : 0);
         return result;
     }
 }
