@@ -13,8 +13,10 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
+import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @ActiveProfiles("local")
 @DataJpaTest
@@ -41,7 +43,7 @@ public class DataLoadTests {
         List<Product> products = loadProducts();
         Customer customer = loadCustomers();
 
-        int ordersToCreate = 100;
+        int ordersToCreate = 20000;
 
         for(int i = 0; i < ordersToCreate; i++) {
             System.out.println("Creating order #: " + i);
@@ -58,6 +60,17 @@ public class DataLoadTests {
         System.out.println("Order id is: " + orderHeader.getId());
 
         System.out.println("Customer Name is: " + orderHeader.getCustomer().getCustomerName());
+    }
+
+    @Test
+    void testN_PlusOneProblem() {
+        Customer customer = customerRepository.findCustomerByCustomerNameIgnoreCase(TEST_CUSTOMER).get();
+
+        IntSummaryStatistics totalOrdered = orderHeaderRepository.findAllByCustomer(customer).stream()
+                .flatMap(orderHeader -> orderHeader.getOrderLines().stream())
+                .collect(Collectors.summarizingInt(el -> el.getQuantityOrdered()));
+
+        System.out.println("total ordered: " + totalOrdered.getSum());
     }
 
     private OrderHeader saveOrder(Customer customer, List<Product> products) {
