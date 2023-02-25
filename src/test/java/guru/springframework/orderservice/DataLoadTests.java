@@ -73,6 +73,20 @@ public class DataLoadTests {
         System.out.println("total ordered: " + totalOrdered.getSum());
     }
 
+    @Test
+    void testDbLock() {
+        Long id = 1L;
+
+        OrderHeader orderHeader = orderHeaderRepository.findById(id).get();
+
+        Address billTo = new Address();
+        billTo.setAddress("Bill me");
+        orderHeader.setBillToAddress(billTo);
+
+        orderHeaderRepository.saveAndFlush(orderHeader);
+        System.out.println("I updated the order");
+    }
+
     private OrderHeader saveOrder(Customer customer, List<Product> products) {
         Random random = new Random();
 
