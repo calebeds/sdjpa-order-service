@@ -40,4 +40,19 @@ class ProductRepositoryTest {
         assertNotNull(product);
         assertNotNull(product.getCategories());
     }
+
+    @Test
+    void addAndUpdateProduct() {
+        Product product = new Product();
+        product.setDescription("My Product");
+        product.setProductStatus(ProductStatus.NEW);
+
+        Product savedProduct = productRepository.saveAndFlush(product);
+
+        savedProduct.setQuantityOnHand(25);
+
+        Product savedProduct2 = productRepository.saveAndFlush(savedProduct);
+
+        System.out.println(savedProduct2.getQuantityOnHand());
+    }
 }
