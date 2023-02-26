@@ -2,6 +2,7 @@ package guru.springframework.orderservice.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Version;
 
 import java.util.Objects;
 
@@ -13,6 +14,9 @@ public class OrderLine extends BaseEntity {
 
     @ManyToOne
     private Product product;
+
+    @Version
+    private Integer version;
 
     public Integer getQuantityOrdered() {
         return quantityOrdered;

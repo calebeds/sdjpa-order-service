@@ -63,6 +63,9 @@ public class OrderHeader extends BaseEntity {
     @Fetch(FetchMode.SELECT)
     private OrderApproval orderApproval;
 
+    @Version
+    private Integer version;
+
     public void addOrderLine(OrderLine orderLine) {
         if (this.orderLines == null)
             this.orderLines = new HashSet<>();
@@ -118,6 +121,14 @@ public class OrderHeader extends BaseEntity {
     public void setOrderApproval(OrderApproval orderApproval) {
         this.orderApproval = orderApproval;
         orderApproval.setOrderHeader(this);
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     @Override
